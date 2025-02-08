@@ -1,0 +1,101 @@
+.tag-detail-page {
+    width: calc(100vw - 20rem);
+    .tag-preview {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+  
+      .back-button {
+        margin-left: 1rem;
+        border-radius: 50%;
+        padding: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        &:hover {
+          cursor: pointer;
+          background-color: #6f68ff;
+          color: white;
+        }
+      }
+  
+      .preview-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin: 1rem;
+      }
+    }
+  
+    .images-container {
+      padding: 3rem;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: 100%;
+      margin: 0;
+      row-gap: 1rem;
+      column-gap: 1rem;
+      .image {
+        width: 10rem;
+        height: 10rem;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+  
+      .empty {
+        font: 2rem sans-serif;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+      }
+    }
+  
+    .error-message {
+      color: red;
+      font-size: 1rem;
+      font-weight: 400;
+      margin: 1rem;
+    }
+  
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 500;
+      margin: 0 1rem;
+      position: relative;
+    }
+    .page-subtitle {
+      font-size: 1.4rem;
+      font-weight: 400;
+      margin: 1rem;
+    }
+    .colorline {
+      margin: 1rem;
+      width: 20vw;
+      border-bottom: 4px solid rgb(114, 106, 255);
+    }
+    .loading-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 40%;
+    }
+    // .background-image{
+    //     background-image: url("../../assets/bookmark.png");
+    //     background-size:     cover;
+    //     background-repeat:   no-repeat;
+    //     background-position: center center;
+    //     height: 50vh;
+    //     width: 10vw;
+    //     z-index: -100;
+    //     position: fixed;
+    //     top: 0;
+    //     right: 15px;
+    // }
+  }
+  

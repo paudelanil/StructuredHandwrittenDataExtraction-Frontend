@@ -1,0 +1,92 @@
+.upload-documents-modal-inner {
+    .upload-documents-modal-title {
+      font-size: 1.4rem;
+    }
+    .upload-error {
+      color: red;
+    }
+  
+    .upload-documents-modal-subtitle {
+      font-size: 1rem;
+      font-weight: 500;
+      color: rgb(131, 131, 131);
+    }
+    .selected-images-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      img {
+        width: 5rem;
+        height: 5rem;
+        margin: 0.5rem;
+        border-radius: 5px;
+        object-fit: cover;
+      }
+    }
+  
+    .select-section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      .select-component {
+        width: fit-content;
+        min-width: 20rem;
+        margin-top: 1rem;
+        // color: rgb(114, 106, 255);
+        border: 1px solid rgb(114, 106, 255);
+        border-radius: 3px;
+      }
+  
+      .upload-documents-modal-buttons {
+        display: flex;
+        flex-direction: column;
+        margin: 1rem;
+        align-items: center;
+        justify-content: center;
+  
+        .upload-documents-modal-button {
+          padding: 0.5rem;
+          border-radius: 5px;
+          text-align: center;
+          font-size: 1rem;
+          cursor: pointer;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          width: fit-content;
+          box-shadow: 0px 100px 80px rgba(174, 174, 190, 0.07),
+            0px 41.7776px 33.4221px rgba(174, 174, 190, 0.0503198),
+            0px 22.3363px 17.869px rgba(174, 174, 190, 0.0417275),
+            0px 12.5216px 10.0172px rgba(174, 174, 190, 0.035),
+            0px 6.6501px 5.32008px rgba(174, 174, 190, 0.0282725),
+            0px 2.76726px 2.21381px rgba(174, 174, 190, 0.0196802);
+          border: none;
+          color: black;
+          background-color: rgb(114, 106, 255);
+          color: white;
+          margin: 0.5rem;
+          &:hover {
+            opacity: 0.9;
+          }
+        }
+      }
+    }
+  }
+  
+  .uploadModal {
+    overflow: visible;
+  
+    animation-fill-mode: forwards !important;
+    box-sizing: border-box;
+    width: 80%;
+    height: fit-content;
+    min-height: 60%;
+    border-radius: 20px;
+  }
+  
