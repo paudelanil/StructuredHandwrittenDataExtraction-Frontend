@@ -303,7 +303,7 @@ function TagsPage() {
 
       <div className="page-title">Folders</div>
       <div className="colorline"></div>
-      <div className="background-image"></div>
+      {/* <div className="background-image"></div> */}
       {error && <div className="error-message">{error}</div>}
       <div className="page-subtitle">Current Folders</div>
       <div onClick={() => setOpenAddTagModal(true)} className="tag-row-add-new">
