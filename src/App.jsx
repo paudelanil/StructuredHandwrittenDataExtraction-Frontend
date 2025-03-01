@@ -10,6 +10,11 @@ import TagsPage from "./components/TagsPage";
 import TagsDetailPage from "./components/TagsPage/detailPage";
 import MiniDrawer from "./components/MiniDrawer";
 import HomePage from "./components/HomePage";
+import TasksPage from "./components/TasksPage";
+import AnnotationsPage from "./components/AnnotationPage";
+import Anotator from "./components/Annotation";
+
+import DocumentsPage from "./components/DocumentsPage";
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 const getDesignTokens = (mode) => ({
@@ -81,6 +86,14 @@ function App() {
                 <Route index element={<HomePage />} /> {/* Default route for "/" */}
                 <Route path="tags" element={<TagsPage />} />
                 <Route path="tags/:tagid" element={<TagsDetailPage />} />
+                <Route path="tasks" element={<TasksPage />}></Route>
+                {/* <Route path='documnts' element={<TasksPage />} ></Route> */}
+                <Route
+                      path="annotate/:imageset_id"
+                      element={<Anotator />}
+                ></Route>
+
+                <Route path='documents' element={<DocumentsPage />} ></Route>
               </Route>
             </Routes>
           </Router>
