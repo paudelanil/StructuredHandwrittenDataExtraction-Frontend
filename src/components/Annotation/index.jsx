@@ -109,7 +109,7 @@ function Annotation() {
     prevActiveRef.current = 0;
 
     (async () => {
-      let res = await api.get(`/api/folder/${folder_id}`);
+      let res = await api.get(`/api/folders/${folder_id}`);
       setImages(res.data["imageset"]);
       setlabels(res.data["labels"]);
 

@@ -16,7 +16,7 @@ import "./taskspage.scss";
 const TASK_STATUS_IDX_TO_TEXT = ["Running", "Completed", "Failed"];
 
 const handleDeleteTask = async (id) => {
-  await api.delete("/api/task/" + id);
+  await api.delete("/api/tasks/" + id);
 };
 
 function TasksPage() {
