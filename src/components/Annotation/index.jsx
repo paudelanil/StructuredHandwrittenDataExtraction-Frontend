@@ -110,7 +110,7 @@ function Annotation() {
 
     (async () => {
       let res = await api.get(`/api/folders/${folder_id}`);
-      setImages(res.data["imageset"]);
+      setImages(res.data["images"]);
       setlabels(res.data["labels"]);
 
       let initial_state = {};
@@ -440,7 +440,7 @@ function Annotation() {
                           src={
                             process.env.REACT_APP_BACKEND_URL +
                             "/api/image/" +
-                            image.path
+                            image.name
                           }
                         ></img>
                       </div>
