@@ -29,7 +29,7 @@ import axios from "axios";
 
 function Annotation() {
   //get path parameter
-  let { imageset_id } = useParams();
+  let { folder_id } = useParams();
 
   const [images, setImages] = useState([]);
   const [labels, setlabels] = useState([]);
@@ -63,7 +63,7 @@ function Annotation() {
     setLoading(true);
     try {
       const res = await api.get(
-        "/api/bbox/" + images[active].id + "/" + imageset_id
+        "/api/bbox/" + images[active].id + "/" + folder_id
       );
       setBbox(res.data.words);
       // setData(res.data.annotation);
@@ -109,7 +109,7 @@ function Annotation() {
     prevActiveRef.current = 0;
 
     (async () => {
-      let res = await api.get(`/api/imageset/${imageset_id}`);
+      let res = await api.get(`/api/folder/${folder_id}`);
       setImages(res.data["imageset"]);
       setlabels(res.data["labels"]);
 
@@ -125,7 +125,7 @@ function Annotation() {
       setData(initial_state);
       setActiveInput(res.data["labels"][0].id);
     })();
-  }, [imageset_id]);
+  }, [folder_id]);
 
   useEffect(() => {
     // // allow to change annotation example by using left and right arrow key
