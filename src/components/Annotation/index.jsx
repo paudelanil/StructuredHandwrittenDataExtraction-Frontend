@@ -322,7 +322,7 @@ function Annotation() {
                   src={
                     process.env.REACT_APP_BACKEND_URL +
                     "/api/image/" +
-                    images[active].path
+                    images[active].name
                   }
                 />
               </div>
@@ -331,7 +331,7 @@ function Annotation() {
                 img={
                   process.env.REACT_APP_BACKEND_URL +
                   "/api/image/" +
-                  images[active].path
+                  images[active].name
                 }
                 addBbox={add_bbox}
                 setBbox={setBbox}
