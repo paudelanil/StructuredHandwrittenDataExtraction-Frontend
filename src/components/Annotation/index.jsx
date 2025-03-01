@@ -71,7 +71,7 @@ function Annotation() {
       console.log(error);
     }
     setLoading(false);
-  }, [active, images, imageset_id]);
+  }, [active, images, folder_id]);
 
   // TODO: Understand useCallback
   const handleKeyDown = useCallback(
@@ -213,7 +213,7 @@ function Annotation() {
       });
       const res = await api.post("/api/annotate/", {
         image_id: images[prevActiveRef.current].id,
-        imageset_id: imageset_id,
+        folder_id: folder_id,
         labeling: labeling,
       });
     } catch (error) {
@@ -224,25 +224,25 @@ function Annotation() {
 
   //my code starts here
   useEffect(() => {
-    const fetchAnnotations = async (image_id, imageset_id) => {
+    const fetchAnnotations = async (image_id, folder_id) => {
       try {
-        const response = await api.get(`/api/annotations/${image_id}/${imageset_id}`);
+        const response = await api.get(`/api/annotations/${image_id}/${folder_id}`);
         console.log("Annotations fetched HERE!!!:", response.data.annotations);
       } catch (error) {
         console.error("Error fetching annotations:", error);
       }
     };
   
-    if (imageset_id && images.length > 0) {
+    if (folder_id && images.length > 0) {
       const image_id = images[active]?.id;
-      fetchAnnotations(image_id, imageset_id);
+      fetchAnnotations(image_id, folder_id);
     }
-  }, [imageset_id, images, active]);  
+  }, [folder_id, images, active]);  
   //my code ends here
 
   const resetAnnotation = () => {
     (async () => {
-      await api.delete(`/api/annotation/${imageset_id}/${images[active].id}`);
+      await api.delete(`/api/annotation/${folder_id}/${images[active].id}`);
       setData(initialState);
     })();
   };
