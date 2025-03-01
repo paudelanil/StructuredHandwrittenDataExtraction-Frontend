@@ -88,7 +88,7 @@ function App() {
                 <Route path="tasks" element={<TasksPage />}></Route>
                 {/* <Route path='documnts' element={<TasksPage />} ></Route> */}
                 <Route
-                      path="annotate/:imageset_id"
+                      path="annotate/:folder_id"
                       element={<Anotator />}
                 ></Route>
 
