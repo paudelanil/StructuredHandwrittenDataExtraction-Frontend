@@ -91,10 +91,10 @@ function TasksPage() {
           onSubmit={(values, { setSubmitting }) => {
             setModalLoading(true);
             api
-              .post("/api/start_ocr_task/", {
+              .post("/api/start_task/", {
                 name: values.name,
                 description: values.description,
-                tags_id: values.tag,
+                folder_id: values.tag,
               },
               // {
               //   headers: {
@@ -110,7 +110,6 @@ function TasksPage() {
               })
               .catch(() => {
                 setModalError("Error creating task. Maybe the remote server is unresponsive.");
-                console.log(typeof tags_id);
                 setSubmitting(false);
                 setModalLoading(false);
               });
@@ -220,11 +219,9 @@ function TasksPage() {
                     return;
                   }
 
-                  navigate(
-                    task.type === 1
-                      ? `/annotate/${task.tags_id}`
-                      : `/review/${task.model_id}/${task.imageset_id}`
-                  );
+                  if (task.type === 1) {
+                    navigate(`/annotate/${task.folder_id}`);
+                  }
                 }}
               >
                 {/* TODO:feature to task ma click garyo vane ocr page or review page maa jaana paryo */}
