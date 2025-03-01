@@ -147,7 +147,7 @@ function TasksPage() {
                 <select name="type" onChange={handleChange} onBlur={handleBlur} value={values.type}>
                   <option value="" disabled>Select Task Type</option>
                   <option value="ocr">OCR</option>
-                  <option value="inference">Inference</option>
+                  {/* <option value="inference">Inference</option> */}
                 </select>
               </div>
 
@@ -236,8 +236,8 @@ function TasksPage() {
                 <div className="task-description">{task.description}</div>
                 <div className="task-type">
                   {task.type === 1 && "OCR Task"}
-                  {task.type === 2 && "Inference Task"}
-                  {task.type === 3 && "Training Task"}
+                  {/* {task.type === 2 && "Inference Task"} */}
+                  {/* {task.type === 2 && "Training Task"} */}
                 </div>
                 <div
                   className={
