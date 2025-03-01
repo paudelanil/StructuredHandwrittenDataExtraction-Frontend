@@ -1,0 +1,189 @@
+.annotator-top-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fullImage {
+  height: 68vh;
+  width: fit-content;
+  position: relative;
+}
+
+.data {
+  width: 36vw;
+  max-height: 68vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.magnifier{
+  height: 100% !important;
+}
+
+.bounding-box {
+  /* transition: all .3s ease-in-out; */
+  border: 1px solid rgb(244, 77, 77);
+}
+
+.bounding-box:hover {
+  border: 2px solid rgb(31, 185, 31);
+  transform: scale(1.05);
+}
+
+
+.bottom-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  /* padding-left: 1.3rem; */
+  /* padding-right: 1.3rem; */
+  /* overflow-x: scroll; */
+}
+
+.bottom-container .options {
+  display: flex;
+  flex-direction: row;
+  width: calc(100vw - 20rem);
+  justify-content: center;
+  position: fixed;
+  bottom: 4.5rem;
+  margin-top: 1rem;
+}
+
+
+.thumbnail {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  bottom: 0.5rem;
+  left: 18rem;
+  height: fit-content;
+  max-height: 30vh;
+  width: calc(100vw - 20rem);
+  overflow-y: auto;
+}
+
+.thumbnail-inner{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: fit-content;
+  height: 100%;
+  margin: auto;
+  padding-bottom: 0.5rem;
+}
+
+.thumbnail-inner>img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.thumbnail::-webkit-scrollbar {
+  height: 5px !important;
+  /* display: none; */
+}
+
+/* Track */
+.thumbnail::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 2px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+.thumbnail::-webkit-scrollbar-thumb {
+  background: rgb(138, 138, 138);
+  border-radius: 1px !important;
+}
+
+/* Handle on hover */
+.thumbnail::-webkit-scrollbar-thumb:hover {
+  background:#7067FE;
+}
+
+.thumbnail-item {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
+  width: 3rem;
+  height: 3rem;
+  min-width: 2rem;
+  margin: 0.2rem 0.2rem;
+  border: 1px solid #decfcf;
+  cursor: pointer;
+  background-color: #fffafa;
+
+}
+
+.thumbnail-item:hover {
+  transform: scale(1.1);
+  border: 1px solid #6F68FF;
+}
+
+.thumbnail-active {
+  border: 3px solid #6F68FF;
+}
+
+
+.MuiButtonBase-root {
+  margin: 0.1rem !important;
+}
+
+.arrow-button {
+  cursor: pointer;
+  padding: 0rem;
+  border: 2px solid rgb(123, 123, 255);
+  border-radius: 50%;
+  transition: all 0.5s ease-in-out;
+}
+
+.annotator{
+  margin-top: 0.5rem;
+  width: calc(100vw - 20rem);
+}
+
+
+.arrow-left {
+  margin: 1rem;
+}
+
+.arrow-right {
+  margin: 1rem;
+}
+
+.arrow-button:hover {
+  transform: scale(1.1);
+  border: none;
+  background-color: #6F68FF;
+  color: white;
+  /* filter: drop-shadow(0px 0px 5px rgb(123, 123, 255)); */
+}
+.arrow-disabled {
+  border: 2px solid rgba(0, 0, 0, 0.26);
+}
+
+.upload-input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 75vw;
+  height: 50vh;
+}
+
+.upload-input {
+  /* visibility: hidden; */
+  border: 10px solid rgb(211, 43, 43);
+}

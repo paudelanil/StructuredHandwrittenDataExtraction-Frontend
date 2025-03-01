@@ -11,10 +11,9 @@ import TagsDetailPage from "./components/TagsPage/detailPage";
 import MiniDrawer from "./components/MiniDrawer";
 import HomePage from "./components/HomePage";
 import TasksPage from "./components/TasksPage";
-import AnnotationsPage from "./components/AnnotationPage";
 import Anotator from "./components/Annotation";
 
-import DocumentsPage from "./components/DocumentsPage";
+
 
 const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 const getDesignTokens = (mode) => ({
@@ -93,7 +92,6 @@ function App() {
                       element={<Anotator />}
                 ></Route>
 
-                <Route path='documents' element={<DocumentsPage />} ></Route>
               </Route>
             </Routes>
           </Router>

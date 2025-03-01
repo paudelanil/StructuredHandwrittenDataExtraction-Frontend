@@ -1,0 +1,31 @@
+.tooltip-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0;
+  input {
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border: none;
+  }
+  .checkmark-icon {
+    color: green;
+  }
+  .loading-icon {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    color: rgb(255, 8, 8);
+    z-index: 1000;
+    @keyframes pulse {
+      0%,
+      100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+  }
+}

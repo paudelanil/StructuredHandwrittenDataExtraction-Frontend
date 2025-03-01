@@ -1,0 +1,11 @@
+.kv-label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0;
+
+  .MuiFormControl-root {
+    width: 80%;
+  }
+}
