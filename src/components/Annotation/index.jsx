@@ -396,22 +396,45 @@ function Annotation() {
     // console.log("data", data);
   };
 
-  const saveAnnotation = async () => {
-    // same annotation for current image
-    try {
-      let labeling = {};
-      Object.keys(data).forEach((key) => {
-        labeling[key] = data[key].word_ids;
-      });
-      const res = await api.post("/api/annotate/", {
-        image_id: images[prevActiveRef.current].id,
-        folder_id: folder_id,
-        labeling: labeling,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-    setArrowButtonDisabled(false);
+  // const saveAnnotation = async () => {
+  //   // save annotation for current image
+  //   try {
+  //     let labeling = {};
+  //     Object.keys(data).forEach((key) => {
+  //       labeling[key] = data[key].word_ids;
+  //     });
+  //     const res = await api.post("/api/annotate/", {
+  //       image_id: images[prevActiveRef.current].id,
+  //       folder_id: folder_id,
+  //       labeling: labeling,
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   setArrowButtonDisabled(false);
+  // };
+
+    const saveAnnotation = async () => {
+      try {
+          let annotations = [];
+
+          // Transform data into an array of objects matching the GET request format
+          Object.keys(data).forEach((label) => {
+              data[label].word_ids.forEach((word_id) => {
+                  annotations.push({
+                      label: label,
+                      word: data[label].text, // Preserve full text
+                      word_id: word_id,
+                  });
+              });
+          });
+
+          await api.post(`/api/annotations/${images[prevActiveRef.current].id}/${folder_id}`, annotations);
+
+      } catch (error) {
+          console.error("Error saving annotations:", error);
+      }
+      setArrowButtonDisabled(false);
   };
 
   const resetAnnotation = () => {
