@@ -429,7 +429,7 @@ function Annotation() {
               });
           });
 
-          await api.post(`/api/annotate/${images[prevActiveRef.current].id}/${folder_id}`, annotations);
+          await api.post(`/api/annotate/${images[active].id}/${folder_id}`, annotations);
 
       } catch (error) {
           console.error("Error saving annotations:", error);
