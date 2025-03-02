@@ -184,65 +184,66 @@ function Annotation() {
   // }, [active, images, folder_id]);
   const fetchAnnotations = useCallback(async () => {
     if (images.length === 0 || !images[active]) return;
-    setLoading(true); // Set loading to true before fetching
+    setLoading(true);
     try {
-      const res = await api.get(`/api/annotations/${images[active].id}/${folder_id}`);
-      if (res.data && res.data.length > 0) {
-        const annotationData = {};
-        res.data.forEach(({ label, word, word_id }) => {
-          if (!annotationData[label]) {
-            annotationData[label] = {
-              text: "",
-              word_ids: [],
-              label_name: label,
-            };
-          }
-          if (!annotationData[label].word_ids.includes(word_id)) {
-            annotationData[label].text += `${word} `;
-            annotationData[label].word_ids.push(word_id);
-          }
-        });
-        setData(annotationData); // Overwrite existing data with fetched data
-      } else {
-          setData({}); //set data to empty object if there is no data from the api
-      }
+        const res = await api.get(`/api/annotations/${images[active].id}/${folder_id}`);
+        if (res.data && res.data.length > 0) {
+            const annotationData = {};
+            res.data.forEach(({ label, word, word_id }) => {
+                if (!annotationData[label]) {
+                    annotationData[label] = {
+                        text: "",
+                        word_ids: [],
+                        label_name: label,
+                    };
+                }
+                if (!annotationData[label].word_ids.includes(word_id)) {
+                    // Preserve the entire word content, including escape characters/newlines.
+                    annotationData[label].text = word;
+                    annotationData[label].word_ids.push(word_id);
+                }
+            });
+            setData(annotationData);
+        } else {
+            setData({});
+        }
     } catch (error) {
-      console.error("Error fetching annotations:", error);
+        console.error("Error fetching annotations:", error);
     } finally {
-      setLoading(false); // Set loading to false after fetching
+        setLoading(false);
     }
-  }, [active, images, folder_id]);
+}, [active, images, folder_id]);
 
-  // TODO: Understand useCallback
-  const handleKeyDown = useCallback(
-    (event) => {
-      if (event.key === "ArrowLeft") {
-        onClickPrev();
-      } else if (event.key === "ArrowRight") {
-        onClickNext();
-      } else if (event.key === "Control") {
-        setCtrlKeyActive(true);
-      } else if (event.key === "d") {
-        onClickNext();
-      } else if (event.key === "a") {
-        onClickPrev();
-      } else if (event.key === "q") {
-        onDropImage();
-      } else if (event.key === "s") {
-        saveAnnotation();
-      }
-    },
-    [images, active, arrowButtonDisabled, loading]
-  );
+  // // TODO: Understand useCallback
+  // const handleKeyDown = useCallback(
+  //   (event) => {
+  //     if (event.key === "ArrowLeft") {
+  //       onClickPrev();
+  //     } else if (event.key === "ArrowRight") {
+  //       onClickNext();
+  //     } else if (event.key === "Control") {
+  //       setCtrlKeyActive(true);
+  //     } else if (event.key === "d") {
+  //       onClickNext();
+  //     } else if (event.key === "a") {
+  //       onClickPrev();
+  //     } else if (event.key === "q") {
+  //       onDropImage();
+  //     } else if (event.key === "s") {
+  //       saveAnnotation();
+  //     }
+  //   },
+  //   [images, active, arrowButtonDisabled, loading]
+  // );
 
-  const handleKeyUp = useCallback(
-    (event) => {
-      if (event.key === "Control") {
-        setCtrlKeyActive(false);
-      }
-    },
-    [images, active, arrowButtonDisabled, loading]
-  );
+  // const handleKeyUp = useCallback(
+  //   (event) => {
+  //     if (event.key === "Control") {
+  //       setCtrlKeyActive(false);
+  //     }
+  //   },
+  //   [images, active, arrowButtonDisabled, loading]
+  // );
 
   // useEffect(() => {
   //   // when first time load, prevActiveRef.current is  first image
@@ -308,21 +309,21 @@ function Annotation() {
   
   
 
-  useEffect(() => {
-    // // allow to change annotation example by using left and right arrow key
-    console.log("Adding event listner");
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keyup", handleKeyUp);
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keyup", handleKeyUp);
-    };
-  }, [handleKeyDown, handleKeyUp]);
-  useEffect(() => {
-    (async () => {
-      await fetchBbox();
-    })();
-  }, [images, fetchBbox]);
+  // useEffect(() => {
+  //   // // allow to change annotation example by using left and right arrow key
+  //   console.log("Adding event listner");
+  //   window.addEventListener("keydown", handleKeyDown);
+  //   window.addEventListener("keyup", handleKeyUp);
+  //   return () => {
+  //     window.removeEventListener("keydown", handleKeyDown);
+  //     window.removeEventListener("keyup", handleKeyUp);
+  //   };
+  // }, [handleKeyDown, handleKeyUp]);
+  // useEffect(() => {
+  //   (async () => {
+  //     await fetchBbox();
+  //   })();
+  // }, [images, fetchBbox]);
 
   useEffect(() => {
     (async function () {
