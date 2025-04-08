@@ -1,30 +1,45 @@
-# Step 1: Use an official Node.js image
-FROM node:18 AS build
+# Stage 1: Build the application
+FROM node:18-alpine AS build
 
-# Step 2: Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Step 3: Copy package.json and yarn.lock (or package-lock.json) to install dependencies
+# Copy package files and install dependencies
 COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-# Step 4: Install dependencies
-RUN yarn install
-
-# Step 5: Copy the rest of the application files
+# Copy application files
 COPY . .
 
-# Step 6: Build the React app
+# Build the application with a default API URL (will be replaced at runtime)
+# Note: Create React App requires environment variables to start with REACT_APP_
+ARG REACT_APP_BACKEND_URL=http://localhost:8000
+ENV REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
 RUN yarn build
 
-# Step 7: Serve the app using a simple HTTP server
+# Stage 2: Serve the built application
 FROM nginx:alpine
 
-# Step 8: Copy the build directory from the previous stage to NGINX’s public folder
+# Copy the built app from the previous stage
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Step 9: Expose the port that the app will run on
+# Create a script to replace the API URL at runtime and start nginx
+RUN echo '#!/bin/sh\n\
+\n\
+# Create JS file with environment variables\n\
+echo "window.env = {" > /usr/share/nginx/html/env-config.js\n\
+echo "  REACT_APP_BACKEND_URL: \"${REACT_APP_BACKEND_URL}\"," >> /usr/share/nginx/html/env-config.js\n\
+echo "};" >> /usr/share/nginx/html/env-config.js\n\
+\n\
+# Start nginx\n\
+exec nginx -g "daemon off;"' > /docker-entrypoint.sh && \
+chmod +x /docker-entrypoint.sh
+
+# Add env-config.js reference to index.html
+RUN sed -i '/<head>/a \    <script src="%PUBLIC_URL%/env-config.js"></script>' /usr/share/nginx/html/index.html
+
+# Expose port 80
 EXPOSE 80
 
-ENV REACT_APP_API_URL=http://localhost:8000
-# Step 10: Start NGINX
-CMD ["nginx", "-g", "daemon off;"]
+# Set entry point to our script
+ENTRYPOINT ["/docker-entrypoint.sh"]
