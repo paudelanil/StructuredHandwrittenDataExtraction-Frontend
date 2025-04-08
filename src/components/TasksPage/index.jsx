@@ -59,10 +59,11 @@ function TasksPage() {
     }
   };
 
+  // fetch only once when the component mounts
   useEffect(() => {
-    let id = setInterval(updateTasks, 4000);
+    // let id = setInterval(updateTasks, 4000);
     fetchTasks();
-    return () => clearInterval(id);
+    // return () => clearInterval(id);
   }, []);
 
   return (
