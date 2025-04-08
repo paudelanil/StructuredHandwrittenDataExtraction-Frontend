@@ -245,16 +245,32 @@ export default function BasicTextFields({
   // Function to download text for a specific label
   const downloadLabelText = (label) => {
     const labelData = data[label];
-    const blob = new Blob([labelData.text], { type: 'text/plain' });
+    let blob, filename;
+
+    if (labelData.label_name === "Text") {
+      // Download as .txt
+      blob = new Blob([labelData.text], { type: 'text/plain' });
+      filename = `${labelData.label_name}_annotation.txt`;
+    } else if (labelData.label_name === "Table") {
+      // Download as .csv
+      blob = new Blob([labelData.text], { type: 'text/csv' });
+      filename = `${labelData.label_name}_annotation.csv`;
+    } else {
+      // Handle other label names or unknown cases
+      console.error("Unsupported label type for download.");
+      return;
+    }
+
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${labelData.label_name}_annotation.txt`;
+    link.download = filename;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
+
 
   return (
     <Box
