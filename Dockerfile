@@ -11,8 +11,7 @@ RUN yarn install --frozen-lockfile
 # Copy application files
 COPY . .
 
-# Build the application with a default API URL (will be replaced at runtime)
-# Note: Create React App requires environment variables to start with REACT_APP_
+# Build the application with a default API URL
 ARG REACT_APP_BACKEND_URL=http://localhost:8000
 ENV REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
 RUN yarn build
@@ -23,23 +22,24 @@ FROM nginx:alpine
 # Copy the built app from the previous stage
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Create a script to replace the API URL at runtime and start nginx
-RUN echo '#!/bin/sh\n\
-\n\
-# Create JS file with environment variables\n\
-echo "window.env = {" > /usr/share/nginx/html/env-config.js\n\
-echo "  REACT_APP_BACKEND_URL: \"${REACT_APP_BACKEND_URL}\"," >> /usr/share/nginx/html/env-config.js\n\
-echo "};" >> /usr/share/nginx/html/env-config.js\n\
-\n\
-# Start nginx\n\
-exec nginx -g "daemon off;"' > /docker-entrypoint.sh && \
-chmod +x /docker-entrypoint.sh
+# Create the script file with proper line endings
+RUN echo '#!/bin/sh' > /docker-entrypoint.sh && \
+    echo '' >> /docker-entrypoint.sh && \
+    echo '# Create JS file with environment variables' >> /docker-entrypoint.sh && \
+    echo 'echo "window.env = {" > /usr/share/nginx/html/env-config.js' >> /docker-entrypoint.sh && \
+    echo 'echo "  REACT_APP_BACKEND_URL: \"${REACT_APP_BACKEND_URL}\"," >> /usr/share/nginx/html/env-config.js' >> /docker-entrypoint.sh && \
+    echo 'echo "};" >> /usr/share/nginx/html/env-config.js' >> /docker-entrypoint.sh && \
+    echo '' >> /docker-entrypoint.sh && \
+    echo '# Start nginx' >> /docker-entrypoint.sh && \
+    echo 'exec nginx -g "daemon off;"' >> /docker-entrypoint.sh && \
+    chmod +x /docker-entrypoint.sh && \
+    cat /docker-entrypoint.sh  # Print the script to build logs for verification
 
-# Add env-config.js reference to index.html
-RUN sed -i '/<head>/a \    <script src="%PUBLIC_URL%/env-config.js"></script>' /usr/share/nginx/html/index.html
+# Add reference to env-config.js in index.html
+RUN sed -i 's/<head>/<head>\n    <script src="env-config.js"><\/script>/' /usr/share/nginx/html/index.html
 
 # Expose port 80
 EXPOSE 80
 
-# Set entry point to our script
+# Set entry point
 ENTRYPOINT ["/docker-entrypoint.sh"]
