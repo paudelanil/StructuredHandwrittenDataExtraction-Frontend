@@ -20,9 +20,9 @@ jobs:
           key: ${{ secrets.AZURE_VM_SSH_KEY }}
           script: |
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
-            docker stop frontend || true
-            docker rm frontend || true
-            docker run -d --name frontend -p 80:80 \
+            docker stop ${{ secrets.DOCKERHUB_USERNAME }}/frontend || true
+            docker rm ${{ secrets.DOCKERHUB_USERNAME }}/frontend || true
+            docker run -d --name ${{ secrets.DOCKERHUB_USERNAME }}/frontend -p 80:80 \
               -e REACT_APP_BACKEND_URL=${{ secrets.DEV_BACKEND_URL }} \
               ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
             docker system prune -af
