@@ -59,6 +59,7 @@ function TasksPage() {
     }
   };
 
+  // fetch only once when the component mounts
   useEffect(() => {
     let id = setInterval(updateTasks, 4000);
     fetchTasks();
@@ -94,6 +95,7 @@ function TasksPage() {
               .post("/api/start_task/", {
                 name: values.name,
                 description: values.description,
+                task_type: values.type,
                 folder_id: values.tag,
               },
               // {
@@ -112,7 +114,9 @@ function TasksPage() {
                 setModalError("Error creating task. Maybe the remote server is unresponsive.");
                 setSubmitting(false);
                 setModalLoading(false);
-              });
+              }
+            );
+            console.log(values);
           }}
         >
           {({ values, errors, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
@@ -146,18 +150,22 @@ function TasksPage() {
                 <select name="type" onChange={handleChange} onBlur={handleBlur} value={values.type}>
                   <option value="" disabled>Select Task Type</option>
                   <option value="ocr">OCR</option>
+                  <option value="table">Table Extraction</option>
+                  <option value="table_and_ocr">OCR and Table Extraction</option>
                   {/* <option value="inference">Inference</option> */}
                 </select>
               </div>
 
-              <div className="tag-select">
-                <div className="addtask-modal-body-text-title">Tag</div>
-                <select name="tag" onChange={handleChange} onBlur={handleBlur} value={values.tag}>
-                  <option value="" disabled>Select a Tag</option>
-                  {tags && tags.map((tag) => (
-                    <option key={tag.id} value={tag.id}>{tag.name}</option>
-                  ))}
-                </select>
+              <div className="addtask-modal-body-text">
+                <div className="tag-select">
+                  <div className="addtask-modal-body-text-title">Folder</div>
+                  <select name="tag" onChange={handleChange} onBlur={handleBlur} value={values.tag}>
+                    <option value="" disabled>Select a Folder</option>
+                    {tags && tags.map((tag) => (
+                      <option key={tag.id} value={tag.id}>{tag.name}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div className="addtask-modal-footer">
@@ -214,12 +222,16 @@ function TasksPage() {
               <div
                 key={task.id}
                 className="task-row"
-                onClick={() => {
-                  if (task.type === 3) {
-                    return;
-                  }
 
+                /* Click here to open completed task */
+                onClick={() => {
                   if (task.type === 1) {
+                    navigate(`/annotate/${task.folder_id}`);
+                  }
+                  if (task.type === 2) {
+                    navigate(`/annotate/${task.folder_id}`);
+                  }
+                  if (task.type === 3) {
                     navigate(`/annotate/${task.folder_id}`);
                   }
                 }}
@@ -233,8 +245,8 @@ function TasksPage() {
                 <div className="task-description">{task.description}</div>
                 <div className="task-type">
                   {task.type === 1 && "OCR Task"}
-                  {/* {task.type === 2 && "Inference Task"} */}
-                  {/* {task.type === 2 && "Training Task"} */}
+                  {task.type === 2 && "Table Task"}
+                  {task.type === 3 && "OCR and Table Task"}
                 </div>
                 <div
                   className={

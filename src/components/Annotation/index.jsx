@@ -27,6 +27,9 @@ import Magnifier from "react-magnifier";
 
 import axios from "axios";
 
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { Button } from '@mui/material';
+
 function Annotation() {
   //get path parameter
   let { folder_id } = useParams();
@@ -107,7 +110,6 @@ function Annotation() {
       setLoading(false); // Ensure loading state is set to false once the request is complete
     }
   }, [images, active, folder_id]);
-  
   
 
   // // Fetch annotations from API
@@ -430,6 +432,7 @@ function Annotation() {
           });
 
           await api.post(`/api/annotate/${images[active].id}/${folder_id}`, annotations);
+          alert("Annotations saved successfully!");
 
       } catch (error) {
           console.error("Error saving annotations:", error);
