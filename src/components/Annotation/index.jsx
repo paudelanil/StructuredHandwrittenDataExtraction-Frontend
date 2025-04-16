@@ -432,6 +432,7 @@ function Annotation() {
           });
 
           await api.post(`/api/annotate/${images[active].id}/${folder_id}`, annotations);
+          alert("Annotations saved successfully!");
 
       } catch (error) {
           console.error("Error saving annotations:", error);

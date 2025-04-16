@@ -61,9 +61,9 @@ function TasksPage() {
 
   // fetch only once when the component mounts
   useEffect(() => {
-    // let id = setInterval(updateTasks, 4000);
+    let id = setInterval(updateTasks, 4000);
     fetchTasks();
-    // return () => clearInterval(id);
+    return () => clearInterval(id);
   }, []);
 
   return (
@@ -156,14 +156,16 @@ function TasksPage() {
                 </select>
               </div>
 
-              <div className="tag-select">
-                <div className="addtask-modal-body-text-title">Tag</div>
-                <select name="tag" onChange={handleChange} onBlur={handleBlur} value={values.tag}>
-                  <option value="" disabled>Select a Tag</option>
-                  {tags && tags.map((tag) => (
-                    <option key={tag.id} value={tag.id}>{tag.name}</option>
-                  ))}
-                </select>
+              <div className="addtask-modal-body-text">
+                <div className="tag-select">
+                  <div className="addtask-modal-body-text-title">Folder</div>
+                  <select name="tag" onChange={handleChange} onBlur={handleBlur} value={values.tag}>
+                    <option value="" disabled>Select a Folder</option>
+                    {tags && tags.map((tag) => (
+                      <option key={tag.id} value={tag.id}>{tag.name}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               <div className="addtask-modal-footer">

@@ -22,7 +22,7 @@ function Upload({
         setPossibleFields(fields.data);
       } catch (err) {
         console.log(err);
-        setError("Couldn't connect with the backend server!");
+        // setError("Couldn't connect with the backend server!");
       }
     })();
   }, []);

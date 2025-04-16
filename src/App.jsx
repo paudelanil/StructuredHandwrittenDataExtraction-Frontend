@@ -12,6 +12,7 @@ import MiniDrawer from "./components/MiniDrawer";
 import HomePage from "./components/HomePage";
 import TasksPage from "./components/TasksPage";
 import Anotator from "./components/Annotation";
+import ExportPage  from "./components/ExportPage"; 
 
 
 
@@ -83,6 +84,7 @@ function App() {
               {/* MiniDrawer as the main layout */}
               <Route path="/" element={<MiniDrawer context={ColorModeContext} />}>
                 <Route index element={<HomePage />} /> {/* Default route for "/" */}
+                < Route path ="export" element={<ExportPage />} />
                 <Route path="tags" element={<TagsPage />} />
                 <Route path="tags/:tagid" element={<TagsDetailPage />} />
                 <Route path="tasks" element={<TasksPage />}></Route>
