@@ -6,6 +6,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import ImageIcon from "@mui/icons-material/Image";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import TableChartIcon from "@mui/icons-material/TableChart";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
 import IconButton from "@mui/material/IconButton";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -13,7 +14,14 @@ import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import CircularProgress from "@mui/material/CircularProgress";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import Fade from "@mui/material/Fade";
 import "./keyvalue.scss";
+import { util } from "prettier";
+
+import api from "../../utils/api";
 
 export default function BasicTextFields({
   data,
@@ -22,6 +30,73 @@ export default function BasicTextFields({
   setArrowButtonDisabled,
   firstLabelInputRef,
 }) {
+  const [extractionLoading, setExtractionLoading] = React.useState({});
+  const [snackbar, setSnackbar] = React.useState({
+    open: false,
+    message: "",
+    severity: "success"
+  });
+
+  // Function to trigger AI extraction for a specific label
+  const triggerAIExtraction = async (labelKey) => {
+    try {
+      // Set loading state for this specific field
+      setExtractionLoading(prev => ({ ...prev, [labelKey]: true }));
+      
+      // Get the current text
+      const currentText = data[labelKey].text;
+      
+      // Call the extraction API
+      const response = await api.post('/api/extraction/extract-key-value', {
+        text: currentText,
+        custom_prompt: null // Using default prompt
+      });
+      
+      // With axios, the data is already parsed from JSON
+      let extractedData = response.data.extracted_data;
+      
+      // Format the data as needed
+      const updatedText = JSON.stringify(extractedData, null, 2);
+      
+      // Update the field with extracted data
+      setData(prevData => ({
+        ...prevData,
+        [labelKey]: {
+          ...prevData[labelKey],
+          text: updatedText,
+          extractedAt: new Date().toISOString(),
+        },
+      }));
+      
+      // Show success message
+      setSnackbar({
+        open: true,
+        message: "Content extracted successfully",
+        severity: "success"
+      });
+    } catch (error) {
+      console.error("Extraction error:", error);
+      setSnackbar({
+        open: true,
+        message: "Failed to extract content: " + (error.response?.data?.detail || error.message),
+        severity: "error"
+      });
+    } finally {
+      // Clear loading state
+      setTimeout(() => {
+        setExtractionLoading(prev => ({ ...prev, [labelKey]: false }));
+      }, 600); // Small delay for better UX
+    }
+  };
+  
+  // Function to close snackbar
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbar(prev => ({ ...prev, open: false }));
+  };
+
   // Function to download text for a specific label
   const downloadLabelText = (label) => {
     const labelData = data[label];
@@ -301,6 +376,8 @@ export default function BasicTextFields({
         const labelData = data[key];
         const isImage = labelData.label_name === "Image";
         const isTable = shouldShowAsTable(labelData.label_name);
+        const isTextType = labelData.label_name === "Text";
+        const isLoading = extractionLoading[key];
 
         return (
           <Paper
@@ -324,6 +401,28 @@ export default function BasicTextFields({
                 {labelData.label_name}
               </Typography>
               <div className="kv-field-actions" style={{ display: "flex", gap: "4px" }}>
+                {isTextType && (
+                  <Tooltip title="AI Extract Key-Value">
+                    <span>
+                      <IconButton
+                        size="small"
+                        aria-label="AI extract key-value"
+                        onClick={() => triggerAIExtraction(key)}
+                        disabled={isLoading || !labelData.text}
+                        sx={{
+                          color: "secondary.main",
+                          position: "relative"
+                        }}
+                      >
+                        {isLoading ? (
+                          <CircularProgress size={20} color="inherit" />
+                        ) : (
+                          <SmartToyIcon />
+                        )}
+                      </IconButton>
+                    </span>
+                  </Tooltip>
+                )}
                 <Tooltip title="Clear">
                   <IconButton
                     size="small"
@@ -381,41 +480,87 @@ export default function BasicTextFields({
             ) : isTable ? (
               <EditableTable labelKey={key} labelData={labelData} />
             ) : (
-              <TextareaAutosize
-                onClick={() => {
-                  setArrowButtonDisabled(true);
-                }}
-                ref={index === 0 ? firstLabelInputRef : null}
-                key={key}
-                onFocus={() => setActiveInput(key)}
-                value={labelData.text}
-                id={key}
-                placeholder={`Enter ${labelData.label_name} content here...`}
-                minRows={3}
-                style={{ 
-                  width: "100%", 
-                  padding: "12px", 
-                  boxSizing: "border-box",
-                  borderRadius: "4px",
-                  border: "1px solid #ccc",
-                  fontFamily: "'Roboto', sans-serif",
-                  fontSize: "14px",
-                  lineHeight: "1.5"
-                }}
-                onChange={(e) => {
-                  setData({
-                    ...data,
-                    [key]: {
-                      ...data[key],
-                      text: e.target.value,
-                    },
-                  });
-                }}
-              />
+              <Fade
+                in={true}
+                key={`${key}-${labelData.extractedAt || 'original'}`}
+                timeout={500}
+              >
+                <div style={{ position: "relative" }}>
+                  <TextareaAutosize
+                    onClick={() => {
+                      setArrowButtonDisabled(true);
+                    }}
+                    ref={index === 0 ? firstLabelInputRef : null}
+                    key={key}
+                    onFocus={() => setActiveInput(key)}
+                    value={labelData.text}
+                    id={key}
+                    placeholder={`Enter ${labelData.label_name} content here...`}
+                    minRows={3}
+                    style={{ 
+                      width: "100%", 
+                      padding: "12px", 
+                      boxSizing: "border-box",
+                      borderRadius: "4px",
+                      border: "1px solid #ccc",
+                      fontFamily: "'Roboto', sans-serif",
+                      fontSize: "14px",
+                      lineHeight: "1.5",
+                      transition: "all 0.3s ease-in-out",
+                      opacity: isLoading ? 0.7 : 1,
+                    }}
+                    onChange={(e) => {
+                      setData({
+                        ...data,
+                        [key]: {
+                          ...data[key],
+                          text: e.target.value,
+                        },
+                      });
+                    }}
+                    disabled={isLoading}
+                  />
+                  {isLoading && (
+                    <div style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexDirection: "column",
+                      gap: "8px"
+                    }}>
+                      <CircularProgress size={30} color="secondary" />
+                      <Typography variant="caption" color="textSecondary">
+                        Extracting key-value data...
+                      </Typography>
+                    </div>
+                  )}
+                </div>
+              </Fade>
             )}
           </Paper>
         );
       })}
+
+      {/* Snackbar for notifications */}
+      <Snackbar 
+        open={snackbar.open} 
+        autoHideDuration={4000} 
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert 
+          onClose={handleCloseSnackbar} 
+          severity={snackbar.severity} 
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

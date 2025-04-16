@@ -321,7 +321,7 @@ export default function Dashboard({ open, handleLogout }) {
         </div>
         <div
           className="leftuppermenu-items"
-          onClick={handleExport}
+          onClick={() => navigate("/export")}
         >
           <IosShareIcon sx={{ mr: 0.5 }} />
           Export
