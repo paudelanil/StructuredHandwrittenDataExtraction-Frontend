@@ -2,6 +2,14 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+---
+
+## Backend and Project Details
+
+Link to the backend code [here](https://github.com/ashim-karki/StructuredHandwrittenDataExtraction-Backend)
+
+---
+
 ## Available Scripts
 
 In the project directory, you can run:
